@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 from gui.imageInputPracticeBase import *
 import os
+import sys
 
 class imgInputPractice(imgInputPracticeBase):
     def __init__(self, parent):
@@ -8,13 +9,8 @@ class imgInputPractice(imgInputPracticeBase):
         self.index = 0
         self.fileList = []
         self.currentCode = None
-
-
-        print self.resource_path("image")
-
-        #self.getAllFileList()
-
-        #self.displayImage()
+        self.getAllFileList()
+        self.displayImage()
 
     def displayImage(self):
         imgPath = self.fileList[self.index]
@@ -24,38 +20,30 @@ class imgInputPractice(imgInputPracticeBase):
         #self.imgBmp.SetBitmapLabel(wx.BitmapFromImage(img))
         self.imgBmp.SetBitmap(wx.BitmapFromImage(img))
         self.imgBmp.Fit()
-
         self.currentCode = os.path.split(imgPath)[1].split(".")[0]
-
         pass
 
 
+    def getRootPath(self):
+        if getattr(sys, 'frozen', None):
+            basedir = sys._MEIPASS
+        else:
+            basedir = os.path.dirname(__file__)
 
-    def resource_path(self, relative):
-        return os.path.join(
-            os.environ.get(
-                "_MEIPASS2",
-                os.path.abspath(".")
-            ),
-            relative
-        )
-
-
+        return basedir
 
     def getAllFileList(self):
         self.fileList = []
-        rootDir = "./image/10_18"
-
-        for fileName in os.listdir(rootDir):
-            path = os.path.join(rootDir, fileName)
+        rootDir = self.getRootPath()
+        imgDir = os.path.join(rootDir, "image/10_18")
+        for fileName in os.listdir(imgDir):
+            path = os.path.join(imgDir, fileName)
             if os.path.isfile(path):
                 self.fileList.append(path)
 
 
     def onAnswer( self, event ):
         answer = self.answerTxt.GetValue()
-
-
 
 
         if answer == self.currentCode:
