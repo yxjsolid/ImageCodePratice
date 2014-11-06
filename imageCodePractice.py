@@ -17,7 +17,7 @@ class imgInputPractice(imgInputPracticeBase):
         self.statsInfo = [
                             (self.STAT_ALL_CNT,      u"总数:"),
                             (self.STAT_ERR_CNT,      u"错误:"),
-                            (self.STAT_ACCURATE,       u"准确率:"),
+                            (self.STAT_ACCURATE,     u"准确率:"),
                             (self.STAT_FASTEST,      u"最快:"),
                             (self.STAT_SLOWEST,      u"最慢:"),
                           ]
