@@ -8,12 +8,11 @@ a = Analysis(['.\\imageCodePractice.py'],
              runtime_hooks=None)
 pyz = PYZ(a.pure)
 
-
 imageFolder = 'image\\10_18'
 extra_datas = []
 
 for fileName in os.listdir(imageFolder):
-    print fileName
+    #print fileName
     path = os.path.join(imageFolder, fileName)
     if os.path.isfile(path):
         imgInfo = (path, path, 'DATA')
@@ -30,5 +29,5 @@ exe = EXE(pyz,
           debug=False,
           strip=None,
           upx=True,
-          console=True)
+          console=False)
 
