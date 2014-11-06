@@ -41,9 +41,11 @@ class imgInputPractice(imgInputPracticeBase):
         self.addAllStats()
 
         self.getAllFileList()
-        self.displayImage()
+        self.addDisplayPanel()
 
-        self.doClock()
+        #self.displayImage()
+
+        #self.doClock()
 
 
     def getNextImageIndex(self):
@@ -176,6 +178,14 @@ class imgInputPractice(imgInputPracticeBase):
     def addAllStats(self):
         for statInfo in self.statsInfo:
             self.addStatElem(statInfo)
+
+
+
+    def addDisplayPanel(self):
+        panel = bidPanelBase(self.disPanel)
+        #self.dispSizer.Add( panel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+
+        self.dispSizer.Add( panel, 1, wx.EXPAND |wx.ALL, 5 )
 
 
 if __name__ == "__main__":
