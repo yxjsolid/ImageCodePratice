@@ -9,9 +9,12 @@ class imgInputPractice(imgInputPracticeBase):
         self.fileList = []
         self.currentCode = None
 
-        self.getAllFileList()
 
-        self.displayImage()
+        print self.resource_path("image")
+
+        #self.getAllFileList()
+
+        #self.displayImage()
 
     def displayImage(self):
         imgPath = self.fileList[self.index]
@@ -26,6 +29,16 @@ class imgInputPractice(imgInputPracticeBase):
 
         pass
 
+
+
+    def resource_path(self, relative):
+        return os.path.join(
+            os.environ.get(
+                "_MEIPASS2",
+                os.path.abspath(".")
+            ),
+            relative
+        )
 
 
 
