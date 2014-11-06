@@ -17,7 +17,7 @@ import wx.xrc
 class imgInputPracticeBase ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 644,467 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -35,7 +35,7 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.m_radioBtn1.SetValue( True ) 
 		sbSizer4.Add( self.m_radioBtn1, 0, wx.ALL, 5 )
 		
-		self.m_radioBtn2 = wx.RadioButton( self.m_panel38, wx.ID_ANY, u"2模式", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_radioBtn2 = wx.RadioButton( self.m_panel38, wx.ID_ANY, u"拍牌模式", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sbSizer4.Add( self.m_radioBtn2, 0, wx.ALL, 5 )
 		
 		
@@ -73,9 +73,6 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.m_panel41 = wx.Panel( self.m_panel34, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer62 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_button1 = wx.Button( self.m_panel41, wx.ID_ANY, u"go", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer62.Add( self.m_button1, 0, wx.ALL, 5 )
-		
 		self.m_staticText98 = wx.StaticText( self.m_panel41, wx.ID_ANY, u"计时:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText98.Wrap( -1 )
 		bSizer62.Add( self.m_staticText98, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -83,6 +80,9 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.clockText = wx.StaticText( self.m_panel41, wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.clockText.Wrap( -1 )
 		bSizer62.Add( self.clockText, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		self.m_button1 = wx.Button( self.m_panel41, wx.ID_ANY, u"go", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer62.Add( self.m_button1, 0, wx.ALL, 5 )
 		
 		
 		self.m_panel41.SetSizer( bSizer62 )
@@ -97,90 +97,53 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.gbsizer.Add( self.m_panel34, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
 		
 		self.disPanel = wx.Panel( self.m_panel5, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.RAISED_BORDER|wx.TAB_TRAVERSAL )
-		self.dispSizer = wx.BoxSizer( wx.VERTICAL )
+		self.dispSizer = wx.GridBagSizer( 0, 0 )
+		self.dispSizer.SetFlexibleDirection( wx.BOTH )
+		self.dispSizer.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		self.dispSizer.SetEmptyCellSize( wx.Size( 0,0 ) )
 		
-		
-		self.disPanel.SetSizer( self.dispSizer )
-		self.disPanel.Layout()
-		self.dispSizer.Fit( self.disPanel )
-		self.gbsizer.Add( self.disPanel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
-		
-		
-		self.gbsizer.AddGrowableCol( 0 )
-		
-		self.m_panel5.SetSizer( self.gbsizer )
-		self.m_panel5.Layout()
-		self.gbsizer.Fit( self.m_panel5 )
-		gbSizer3.Add( self.m_panel5, wx.GBPosition( 0, 1 ), wx.GBSpan( 2, 1 ), wx.EXPAND |wx.ALL, 5 )
-		
-		
-		gbSizer3.AddGrowableCol( 1 )
-		gbSizer3.AddGrowableRow( 1 )
-		
-		self.m_panel2.SetSizer( gbSizer3 )
-		self.m_panel2.Layout()
-		gbSizer3.Fit( self.m_panel2 )
-		bSizer51.Add( self.m_panel2, 1, wx.EXPAND |wx.ALL, 5 )
-		
-		
-		self.SetSizer( bSizer51 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-	
-	def __del__( self ):
-		pass
-	
-
-###########################################################################
-## Class practicePanelBase
-###########################################################################
-
-class practicePanelBase ( wx.Panel ):
-	
-	def __init__( self, parent ):
-		wx.Panel.__init__ ( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL )
-		
+		self.practicePanel = wx.Panel( self.disPanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SIMPLE_BORDER|wx.TAB_TRAVERSAL )
 		gbSizer16 = wx.GridBagSizer( 0, 0 )
 		gbSizer16.SetFlexibleDirection( wx.BOTH )
 		gbSizer16.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.imgBmp = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.imgBmp = wx.StaticBitmap( self.practicePanel, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
 		gbSizer16.Add( self.imgBmp, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 		
-		self.answerTxt = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+		self.answerTxt = wx.TextCtrl( self.practicePanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER|wx.SIMPLE_BORDER )
 		gbSizer16.Add( self.answerTxt, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 		
+		self.m_panel46 = wx.Panel( self.practicePanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SIMPLE_BORDER|wx.TAB_TRAVERSAL )
+		bSizer34 = wx.BoxSizer( wx.VERTICAL )
 		
-		self.SetSizer( gbSizer16 )
-		self.Layout()
+		self.answerCB = wx.CheckBox( self.m_panel46, wx.ID_ANY, u"看答案", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.answerCB.SetValue(True) 
+		bSizer34.Add( self.answerCB, 0, wx.ALL, 5 )
 		
-		# Connect Events
-		self.answerTxt.Bind( wx.EVT_TEXT_ENTER, self.onAnswer )
-	
-	def __del__( self ):
-		pass
-	
-	
-	# Virtual event handlers, overide them in your derived class
-	def onAnswer( self, event ):
-		event.Skip()
-	
-
-###########################################################################
-## Class bidPanelBase
-###########################################################################
-
-class bidPanelBase ( wx.Panel ):
-	
-	def __init__( self, parent ):
-		wx.Panel.__init__ ( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL )
+		self.showAnswerText = wx.StaticText( self.m_panel46, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0|wx.SIMPLE_BORDER )
+		self.showAnswerText.Wrap( -1 )
+		self.showAnswerText.SetMinSize( wx.Size( 60,-1 ) )
 		
+		bSizer34.Add( self.showAnswerText, 0, wx.ALL, 5 )
+		
+		
+		self.m_panel46.SetSizer( bSizer34 )
+		self.m_panel46.Layout()
+		bSizer34.Fit( self.m_panel46 )
+		gbSizer16.Add( self.m_panel46, wx.GBPosition( 0, 1 ), wx.GBSpan( 2, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		
+		self.practicePanel.SetSizer( gbSizer16 )
+		self.practicePanel.Layout()
+		gbSizer16.Fit( self.practicePanel )
+		self.dispSizer.Add( self.practicePanel, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		self.bidPanel = wx.Panel( self.disPanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		gbSizer31 = wx.GridBagSizer( 0, 0 )
 		gbSizer31.SetFlexibleDirection( wx.BOTH )
 		gbSizer31.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
-		self.m_panel77 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SIMPLE_BORDER|wx.TAB_TRAVERSAL )
+		self.m_panel77 = wx.Panel( self.bidPanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SIMPLE_BORDER|wx.TAB_TRAVERSAL )
 		gbSizer36 = wx.GridBagSizer( 0, 0 )
 		gbSizer36.SetFlexibleDirection( wx.BOTH )
 		gbSizer36.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -213,7 +176,7 @@ class bidPanelBase ( wx.Panel ):
 		
 		self.m_staticText109 = wx.StaticText( self.m_panel48, wx.ID_ANY, u"减价快捷键", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText109.Wrap( -1 )
-		bSizer71.Add( self.m_staticText109, 0, wx.ALL, 5 )
+		bSizer71.Add( self.m_staticText109, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 		
 		self.m_button2 = wx.Button( self.m_panel48, wx.ID_ANY, u"-300", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_button2.SetForegroundColour( wx.Colour( 255, 0, 0 ) )
@@ -239,9 +202,9 @@ class bidPanelBase ( wx.Panel ):
 		self.m_panel481 = wx.Panel( self.m_panel77, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer711 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		self.m_staticText1091 = wx.StaticText( self.m_panel481, wx.ID_ANY, u"佳佳快捷键", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText1091 = wx.StaticText( self.m_panel481, wx.ID_ANY, u"减价快捷键", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText1091.Wrap( -1 )
-		bSizer711.Add( self.m_staticText1091, 0, wx.ALL, 5 )
+		bSizer711.Add( self.m_staticText1091, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 		
 		self.m_button21 = wx.Button( self.m_panel481, wx.ID_ANY, u"+300", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer711.Add( self.m_button21, 0, wx.ALL, 5 )
@@ -265,17 +228,17 @@ class bidPanelBase ( wx.Panel ):
 		self.m_staticText10911.Wrap( -1 )
 		bSizer7111.Add( self.m_staticText10911, 0, wx.ALL, 5 )
 		
-		self.m_textCtrl15 = wx.TextCtrl( self.m_panel4811, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_textCtrl15.SetMinSize( wx.Size( 150,-1 ) )
+		self.bidAmountTxt = wx.TextCtrl( self.m_panel4811, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.bidAmountTxt.SetMinSize( wx.Size( 150,-1 ) )
 		
-		bSizer7111.Add( self.m_textCtrl15, 0, wx.ALL, 5 )
+		bSizer7111.Add( self.bidAmountTxt, 0, wx.ALL, 5 )
 		
-		self.m_button17 = wx.Button( self.m_panel4811, wx.ID_ANY, u"出 价", wx.DefaultPosition, wx.DefaultSize, 0|wx.NO_BORDER )
-		self.m_button17.SetFont( wx.Font( 15, 70, 90, 90, False, wx.EmptyString ) )
-		self.m_button17.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
-		self.m_button17.SetBackgroundColour( wx.Colour( 83, 83, 255 ) )
+		self.btn_bid = wx.Button( self.m_panel4811, wx.ID_ANY, u"出 价", wx.DefaultPosition, wx.DefaultSize, 0|wx.NO_BORDER )
+		self.btn_bid.SetFont( wx.Font( 15, 70, 90, 90, False, wx.EmptyString ) )
+		self.btn_bid.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+		self.btn_bid.SetBackgroundColour( wx.Colour( 83, 83, 255 ) )
 		
-		bSizer7111.Add( self.m_button17, 0, wx.ALL, 5 )
+		bSizer7111.Add( self.btn_bid, 0, wx.ALL, 5 )
 		
 		
 		self.m_panel4811.SetSizer( bSizer7111 )
@@ -289,7 +252,7 @@ class bidPanelBase ( wx.Panel ):
 		gbSizer36.Fit( self.m_panel77 )
 		gbSizer31.Add( self.m_panel77, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND, 5 )
 		
-		self.m_panel79 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.m_panel79 = wx.Panel( self.bidPanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		gbSizer37 = wx.GridBagSizer( 0, 0 )
 		gbSizer37.SetFlexibleDirection( wx.BOTH )
 		gbSizer37.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -326,11 +289,90 @@ class bidPanelBase ( wx.Panel ):
 		gbSizer31.Add( self.m_panel79, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND, 5 )
 		
 		
-		self.SetSizer( gbSizer31 )
+		self.bidPanel.SetSizer( gbSizer31 )
+		self.bidPanel.Layout()
+		gbSizer31.Fit( self.bidPanel )
+		self.dispSizer.Add( self.bidPanel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		
+		self.disPanel.SetSizer( self.dispSizer )
+		self.disPanel.Layout()
+		self.dispSizer.Fit( self.disPanel )
+		self.gbsizer.Add( self.disPanel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		
+		self.gbsizer.AddGrowableCol( 0 )
+		
+		self.m_panel5.SetSizer( self.gbsizer )
+		self.m_panel5.Layout()
+		self.gbsizer.Fit( self.m_panel5 )
+		gbSizer3.Add( self.m_panel5, wx.GBPosition( 0, 1 ), wx.GBSpan( 2, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		
+		gbSizer3.AddGrowableCol( 1 )
+		gbSizer3.AddGrowableRow( 1 )
+		
+		self.m_panel2.SetSizer( gbSizer3 )
+		self.m_panel2.Layout()
+		gbSizer3.Fit( self.m_panel2 )
+		bSizer51.Add( self.m_panel2, 1, wx.EXPAND |wx.ALL, 5 )
+		
+		
+		self.SetSizer( bSizer51 )
 		self.Layout()
+		
+		self.Centre( wx.BOTH )
+		
+		# Connect Events
+		self.m_radioBtn1.Bind( wx.EVT_RADIOBUTTON, self.onModePractice )
+		self.m_radioBtn2.Bind( wx.EVT_RADIOBUTTON, self.onModeBid )
+		self.answerTxt.Bind( wx.EVT_TEXT_ENTER, self.onPracticeAnswer )
+		self.answerCB.Bind( wx.EVT_CHECKBOX, self.onShowAnswer )
+		self.m_button2.Bind( wx.EVT_BUTTON, self.onDec300 )
+		self.m_button3.Bind( wx.EVT_BUTTON, self.onDec200 )
+		self.m_button4.Bind( wx.EVT_BUTTON, self.onDec100 )
+		self.m_button21.Bind( wx.EVT_BUTTON, self.onAdd300 )
+		self.m_button31.Bind( wx.EVT_BUTTON, self.onAdd200 )
+		self.m_button41.Bind( wx.EVT_BUTTON, self.onAdd100 )
+		self.btn_bid.Bind( wx.EVT_BUTTON, self.onBid )
 	
 	def __del__( self ):
 		pass
+	
+	
+	# Virtual event handlers, overide them in your derived class
+	def onModePractice( self, event ):
+		event.Skip()
+	
+	def onModeBid( self, event ):
+		event.Skip()
+	
+	def onPracticeAnswer( self, event ):
+		event.Skip()
+	
+	def onShowAnswer( self, event ):
+		event.Skip()
+	
+	def onDec300( self, event ):
+		event.Skip()
+	
+	def onDec200( self, event ):
+		event.Skip()
+	
+	def onDec100( self, event ):
+		event.Skip()
+	
+	def onAdd300( self, event ):
+		event.Skip()
+	
+	def onAdd200( self, event ):
+		event.Skip()
+	
+	def onAdd100( self, event ):
+		event.Skip()
+	
+	def onBid( self, event ):
+		event.Skip()
 	
 
 ###########################################################################
@@ -487,6 +529,128 @@ class MyFrame2 ( wx.Frame ):
 		
 		
 		self.SetSizer( gbSizer2 )
+		self.Layout()
+		
+		self.Centre( wx.BOTH )
+	
+	def __del__( self ):
+		pass
+	
+
+###########################################################################
+## Class ImageCodeDialogBase
+###########################################################################
+
+class ImageCodeDialogBase ( wx.Dialog ):
+	
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 513,337 ), style = wx.DEFAULT_DIALOG_STYLE )
+		
+		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+		
+		gbSizer22 = wx.GridBagSizer( 0, 0 )
+		gbSizer22.SetFlexibleDirection( wx.BOTH )
+		gbSizer22.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_ALL )
+		
+		self.m_panel41 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.m_panel41.SetBackgroundColour( wx.Colour( 77, 77, 255 ) )
+		
+		bSizer29 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.txxxt = wx.StaticText( self.m_panel41, wx.ID_ANY, u"输入校验码", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.txxxt.Wrap( -1 )
+		self.txxxt.SetFont( wx.Font( 18, 70, 90, 92, False, wx.EmptyString ) )
+		self.txxxt.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+		
+		bSizer29.Add( self.txxxt, 0, wx.ALL, 5 )
+		
+		
+		self.m_panel41.SetSizer( bSizer29 )
+		self.m_panel41.Layout()
+		bSizer29.Fit( self.m_panel41 )
+		gbSizer22.Add( self.m_panel41, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		self.m_panel42 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.STATIC_BORDER|wx.TAB_TRAVERSAL )
+		gbSizer23 = wx.GridBagSizer( 0, 0 )
+		gbSizer23.SetFlexibleDirection( wx.BOTH )
+		gbSizer23.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_panel43 = wx.Panel( self.m_panel42, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.m_panel43.SetBackgroundColour( wx.Colour( 215, 223, 232 ) )
+		
+		bSizer30 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.infoText = wx.StaticText( self.m_panel43, wx.ID_ANY, u"您的出价金额为：73500元", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.infoText.Wrap( -1 )
+		self.infoText.SetFont( wx.Font( 16, 70, 90, 92, False, wx.EmptyString ) )
+		self.infoText.SetForegroundColour( wx.Colour( 255, 0, 0 ) )
+		self.infoText.SetBackgroundColour( wx.Colour( 211, 223, 243 ) )
+		
+		bSizer30.Add( self.infoText, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		
+		self.m_panel43.SetSizer( bSizer30 )
+		self.m_panel43.Layout()
+		bSizer30.Fit( self.m_panel43 )
+		gbSizer23.Add( self.m_panel43, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND, 5 )
+		
+		self.m_panel44 = wx.Panel( self.m_panel42, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.m_staticText39 = wx.StaticText( self.m_panel44, wx.ID_ANY, u"请输入验证码：", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText39.Wrap( -1 )
+		self.m_staticText39.SetFont( wx.Font( 15, 70, 90, 90, False, wx.EmptyString ) )
+		self.m_staticText39.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INACTIVECAPTIONTEXT ) )
+		
+		bSizer31.Add( self.m_staticText39, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		self.code_text = wx.TextCtrl( self.m_panel44, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.code_text.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INACTIVECAPTION ) )
+		
+		bSizer31.Add( self.code_text, 0, wx.ALL, 5 )
+		
+		self.bid_imageBmp = wx.StaticBitmap( self.m_panel44, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer31.Add( self.bid_imageBmp, 0, wx.ALL, 5 )
+		
+		
+		self.m_panel44.SetSizer( bSizer31 )
+		self.m_panel44.Layout()
+		bSizer31.Fit( self.m_panel44 )
+		gbSizer23.Add( self.m_panel44, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 50 )
+		
+		
+		gbSizer23.AddGrowableCol( 0 )
+		
+		self.m_panel42.SetSizer( gbSizer23 )
+		self.m_panel42.Layout()
+		gbSizer23.Fit( self.m_panel42 )
+		gbSizer22.Add( self.m_panel42, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+		
+		self.m_panel45 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		gSizer1 = wx.GridSizer( 0, 2, 0, 0 )
+		
+		self.m_button26 = wx.Button( self.m_panel45, wx.ID_OK, u"确 定", wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER )
+		self.m_button26.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+		self.m_button26.SetBackgroundColour( wx.Colour( 50, 50, 255 ) )
+		
+		gSizer1.Add( self.m_button26, 0, wx.ALIGN_RIGHT|wx.RIGHT, 30 )
+		
+		self.m_button27 = wx.Button( self.m_panel45, wx.ID_CANCEL, u"取 消", wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER )
+		self.m_button27.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+		self.m_button27.SetBackgroundColour( wx.Colour( 50, 50, 255 ) )
+		
+		gSizer1.Add( self.m_button27, 0, wx.ALIGN_LEFT|wx.LEFT, 30 )
+		
+		
+		self.m_panel45.SetSizer( gSizer1 )
+		self.m_panel45.Layout()
+		gSizer1.Fit( self.m_panel45 )
+		gbSizer22.Add( self.m_panel45, wx.GBPosition( 2, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 15 )
+		
+		
+		gbSizer22.AddGrowableCol( 0 )
+		
+		self.SetSizer( gbSizer22 )
 		self.Layout()
 		
 		self.Centre( wx.BOTH )

@@ -9,6 +9,8 @@ import random
 class imgInputPractice(imgInputPracticeBase):
 
     STAT_ALL_CNT, STAT_CORRECT_CNT, STAT_ERR_CNT, STAT_ACCURATE, STAT_FASTEST, STAT_SLOWEST = range(6)
+    MODE_PRACTICE, MODE_BID = range(2)
+
 
     def __init__(self, parent):
         imgInputPracticeBase.__init__(self, parent)
@@ -36,21 +38,25 @@ class imgInputPractice(imgInputPracticeBase):
         self.slow = 0
         self.accurate = 0
         self.inError = 0
+        self.mode = self.MODE_PRACTICE
+        self.showAnswer = False
+        self.bidAmount = 73200
 
-
+        self.showAnswerDisable()
         self.addAllStats()
-
         self.getAllFileList()
-        self.addDisplayPanel()
+        #self.addDisplayPanel()
 
-        #self.displayImage()
+        self.displayImage()
 
-        #self.doClock()
+        self.doClock()
+        self.onModeSelect()
 
 
-    def getNextImageIndex(self):
-        index = random.randint(0, self.fileCnt - 1)
-        return index
+    def getNewImage(self):
+        self.currentIndex = random.randint(0, self.fileCnt - 1)
+        imgPath = self.fileList[self.currentIndex]
+        self.currentCode = os.path.split(imgPath)[1].split(".")[0]
 
 
     def resetClock(self):
@@ -58,14 +64,14 @@ class imgInputPractice(imgInputPracticeBase):
 
 
     def displayImage(self):
-        self.currentIndex = self.getNextImageIndex()
+        self.getNewImage()
         imgPath = self.fileList[self.currentIndex]
         img = wx.Image(imgPath)
         #self.imgBmp.SetBitmapLabel(wx.BitmapFromImage(img))
         self.imgBmp.SetBitmap(wx.BitmapFromImage(img))
         self.imgBmp.Fit()
         self.resetClock()
-        self.currentCode = os.path.split(imgPath)[1].split(".")[0]
+        self.displayAnswer()
         pass
 
 
@@ -89,9 +95,8 @@ class imgInputPractice(imgInputPracticeBase):
         self.fileCnt = len(self.fileList)
 
 
-    def onAnswer( self, event ):
-        print "onAnsser"
-        answer = self.answerTxt.GetValue()
+    def checkAnswer(self, answer):
+        isErr = 0
         if answer == self.currentCode:
             self.correctCnt += 1
             diff = time.time() - self.clockBeginTime
@@ -103,17 +108,27 @@ class imgInputPractice(imgInputPracticeBase):
             self.answerTxt.Clear()
             self.inError = 0
             self.totalCnt += 1
+
+            isErr = 0
         else:
             if not self.inError:
                 self.errCnt += 1
                 self.inError = 1
-
-            wx.MessageBox(u'错了','Error',wx.OK|wx.ICON_ERROR)
-            print "\n error"
-            print "input:", answer
-            print "correct:", self.currentCode
+            isErr = 1
 
         self.updateAllStats()
+        return isErr
+
+    def onPracticeAnswer( self, event ):
+        print "onAnsser"
+        answer = self.answerTxt.GetValue()
+        err = self.checkAnswer(answer)
+
+        if err:
+            wx.MessageBox(u'错了','Error',wx.OK|wx.ICON_ERROR)
+        else:
+            self.displayImage()
+
 
     def updateStats(self, statType, stat):
         text = self.statsDic[statType]
@@ -184,8 +199,155 @@ class imgInputPractice(imgInputPracticeBase):
     def addDisplayPanel(self):
         panel = bidPanelBase(self.disPanel)
         #self.dispSizer.Add( panel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
+        self.dispSizer.Add( panel, 1, wx.EXPAND |wx.ALL, 5 )
+        panel = practicePanelBase(self.disPanel)
+        #self.dispSizer.Add( panel, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.EXPAND |wx.ALL, 5 )
 
         self.dispSizer.Add( panel, 1, wx.EXPAND |wx.ALL, 5 )
+
+
+
+    def onModeBid(self, evt):
+        self.mode = self.MODE_BID
+        self.onModeSelect()
+
+    def onModePractice(self, evt):
+        self.mode = self.MODE_PRACTICE
+        self.onModeSelect()
+
+    def onModeSelect(self):
+        if self.mode == self.MODE_PRACTICE:
+            self.bidPanel.Show(False)
+            self.practicePanel.Show(True)
+
+        if self.mode == self.MODE_BID:
+            self.bidPanel.Show(True)
+            self.practicePanel.Show(False)
+
+        self.dispSizer.Fit( self.disPanel )
+        self.resetClock()
+
+
+    def checkBidAmount(self, amount):
+        try:
+            num = int(amount)
+            print num
+        except Exception,e:
+            return False
+
+        if num%100 > 0:
+            return False
+
+        if num > self.bidAmount + 300 or num  <  self.bidAmount -300:
+            return False
+
+        return True
+
+    def onBid( self, event ):
+        self.getNewImage()
+        imgPath = self.fileList[self.currentIndex]
+        amount = self.bidAmountTxt.GetValue()
+
+        print "amount:", amount
+
+        valid = self.checkBidAmount(amount)
+
+        if not valid:
+            wx.MessageBox(u'错了','Error',wx.OK|wx.ICON_ERROR)
+            return
+
+
+        dialog = ImageCodeDialog(None, imgPath, amount)
+        result = dialog.ShowModal()
+        err = 0
+        if result == wx.ID_OK:
+            answer =  dialog.getInput()
+            print answer
+            err = self.checkAnswer(answer)
+        else:
+            pass
+        dialog.Destroy()
+
+        self.bidAmountTxt.Clear()
+
+        if err:
+            wx.MessageBox(u'错了','Error',wx.OK|wx.ICON_ERROR)
+
+        pass
+
+
+    def showAnswerDisable(self):
+        self.showAnswer = False
+        self.answerCB.SetValue(False)
+
+    def displayAnswer(self):
+        if self.showAnswer:
+            print self.currentCode
+            self.showAnswerText.SetLabel(self.currentCode)
+        else:
+            self.showAnswerText.SetLabel("")
+
+
+    def onShowAnswer(self, event):
+        if self.answerCB.IsChecked():
+            self.showAnswer = True
+        else:
+            self.showAnswer = False
+
+        self.displayAnswer()
+        pass
+
+    def onDec300(self, evt):
+        amount = self.bidAmount - 300
+        self.updateBidAmount(amount)
+
+    def onDec200(self, evt):
+        amount = self.bidAmount - 200
+        self.updateBidAmount(amount)
+
+    def onDec100(self, evt):
+        amount = self.bidAmount - 100
+        self.updateBidAmount(amount)
+
+    def onAdd300(self, evt):
+        amount = self.bidAmount + 300
+        self.updateBidAmount(amount)
+
+    def onAdd200(self, evt):
+        amount = self.bidAmount + 200
+        self.updateBidAmount(amount)
+
+    def onAdd100(self, evt):
+        amount = self.bidAmount + 100
+        self.updateBidAmount(amount)
+
+    def updateBidAmount(self, bidAmount):
+        self.bidAmountTxt.SetLabel(str(bidAmount))
+
+class ImageCodeDialog(ImageCodeDialogBase):
+    def __init__(self, parent, fileName, amount):
+        ImageCodeDialogBase.__init__(self, parent)
+
+        self.setImage(fileName)
+        self.code_text.SetFocus()
+        self.setInfo(amount)
+
+    def getInput(self):
+        return self.code_text.GetValue()
+
+    def setImage(self, fileName):
+
+        img = wx.Image(fileName)
+        #self.imgBmp.SetBitmapLabel(wx.BitmapFromImage(img))
+        self.bid_imageBmp.SetBitmap(wx.BitmapFromImage(img))
+        self.bid_imageBmp.Fit()
+
+        pass
+
+
+    def setInfo(self, amount):
+        info = u"您的出价金额为:%s元"%str(amount)
+        self.infoText.SetLabel(info)
 
 
 if __name__ == "__main__":
