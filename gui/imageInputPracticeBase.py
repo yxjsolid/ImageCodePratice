@@ -56,6 +56,9 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.statSizer.Fit( self.m_panel4 )
 		sbSizer1.Add( self.m_panel4, 1, wx.EXPAND |wx.ALL, 5 )
 		
+		self.m_button30 = wx.Button( self.m_panel39, wx.ID_ANY, u"重置", wx.DefaultPosition, wx.DefaultSize, 0 )
+		sbSizer1.Add( self.m_button30, 0, wx.ALL, 5 )
+		
 		
 		self.m_panel39.SetSizer( sbSizer1 )
 		self.m_panel39.Layout()
@@ -80,9 +83,6 @@ class imgInputPracticeBase ( wx.Frame ):
 		self.clockText = wx.StaticText( self.m_panel41, wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.clockText.Wrap( -1 )
 		bSizer62.Add( self.clockText, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
-		
-		self.m_button1 = wx.Button( self.m_panel41, wx.ID_ANY, u"go", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer62.Add( self.m_button1, 0, wx.ALL, 5 )
 		
 		
 		self.m_panel41.SetSizer( bSizer62 )
@@ -326,6 +326,7 @@ class imgInputPracticeBase ( wx.Frame ):
 		# Connect Events
 		self.m_radioBtn1.Bind( wx.EVT_RADIOBUTTON, self.onModePractice )
 		self.m_radioBtn2.Bind( wx.EVT_RADIOBUTTON, self.onModeBid )
+		self.m_button30.Bind( wx.EVT_BUTTON, self.onStatReset )
 		self.answerTxt.Bind( wx.EVT_TEXT_ENTER, self.onPracticeAnswer )
 		self.answerCB.Bind( wx.EVT_CHECKBOX, self.onShowAnswer )
 		self.m_button2.Bind( wx.EVT_BUTTON, self.onDec300 )
@@ -345,6 +346,9 @@ class imgInputPracticeBase ( wx.Frame ):
 		event.Skip()
 	
 	def onModeBid( self, event ):
+		event.Skip()
+	
+	def onStatReset( self, event ):
 		event.Skip()
 	
 	def onPracticeAnswer( self, event ):

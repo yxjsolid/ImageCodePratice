@@ -8,7 +8,7 @@ import random
 
 class imgInputPractice(imgInputPracticeBase):
 
-    STAT_ALL_CNT, STAT_CORRECT_CNT, STAT_ERR_CNT, STAT_ACCURATE, STAT_FASTEST, STAT_SLOWEST = range(6)
+    STAT_ALL_CNT, STAT_CORRECT_CNT, STAT_ERR_CNT, STAT_ACCURATE, STAT_FASTEST, STAT_SLOWEST, STAT_AVERAGE = range(7)
     MODE_PRACTICE, MODE_BID = range(2)
 
 
@@ -20,8 +20,9 @@ class imgInputPractice(imgInputPracticeBase):
                             (self.STAT_ALL_CNT,      u"总数:"),
                             (self.STAT_ERR_CNT,      u"错误:"),
                             (self.STAT_ACCURATE,     u"准确率:"),
-                            (self.STAT_FASTEST,      u"最快:"),
-                            (self.STAT_SLOWEST,      u"最慢:"),
+                            (self.STAT_FASTEST,      u"最少耗时:"),
+                            (self.STAT_SLOWEST,      u"最多耗时:"),
+                            (self.STAT_AVERAGE,      u"平均耗时:"),
                           ]
 
         self.statsDic = {}
@@ -36,6 +37,7 @@ class imgInputPractice(imgInputPracticeBase):
         self.correctCnt = 0
         self.fast = 9999
         self.slow = 0
+        self.timeTotal= 0
         self.accurate = 0
         self.inError = 0
         self.mode = self.MODE_PRACTICE
@@ -103,7 +105,7 @@ class imgInputPractice(imgInputPracticeBase):
             self.fast = min(diff, self.fast)
             self.slow = max(diff, self.slow)
 
-            print "spend %f s"%(diff)
+            self.timeTotal += diff
             self.displayImage()
             self.answerTxt.Clear()
             self.inError = 0
@@ -120,7 +122,6 @@ class imgInputPractice(imgInputPracticeBase):
         return isErr
 
     def onPracticeAnswer( self, event ):
-        print "onAnsser"
         answer = self.answerTxt.GetValue()
         err = self.checkAnswer(answer)
 
@@ -143,17 +144,29 @@ class imgInputPractice(imgInputPracticeBase):
             rate = "0"
 
         self.updateStats(self.STAT_ACCURATE, rate)
+
         slow = "%.2f s"%(self.slow)
         self.updateStats(self.STAT_SLOWEST, slow)
-        fast = "%.2f s"%(self.fast)
+
+        if self.fast == 9999:
+            fast = "0"
+        else:
+            fast = "%.2f s"%(self.fast)
         self.updateStats(self.STAT_FASTEST, fast)
+
+        if self.totalCnt:
+            avg = "%.2f s"%(float(self.timeTotal)/self.totalCnt)
+        else:
+            avg = "0"
+
+        self.updateStats(self.STAT_AVERAGE, avg)
 
         pass
 
     def __doClock(self):
         diff = 0
         while True:
-            label = "%f"%diff
+            label = "%.2f"%diff
             self.clockText.SetLabel(label)
             time.sleep(0.01)
             diff = time.time() - self.clockBeginTime
@@ -175,7 +188,7 @@ class imgInputPractice(imgInputPracticeBase):
         bSizer = wx.BoxSizer( wx.HORIZONTAL )
         statNameText = wx.StaticText( self.m_panel4, wx.ID_ANY, label, wx.DefaultPosition, wx.DefaultSize, 0 )
         statNameText.Wrap( -1 )
-        statNameText.SetMinSize( wx.Size( 40,-1 ) )
+        statNameText.SetMinSize( wx.Size( 60,-1 ) )
         bSizer.Add( statNameText, 0, wx.ALL, 5 )
 
         #index = str(random.randint(0, 1000))
@@ -231,7 +244,6 @@ class imgInputPractice(imgInputPracticeBase):
     def checkBidAmount(self, amount):
         try:
             num = int(amount)
-            print num
         except Exception,e:
             return False
 
@@ -248,8 +260,6 @@ class imgInputPractice(imgInputPracticeBase):
         imgPath = self.fileList[self.currentIndex]
         amount = self.bidAmountTxt.GetValue()
 
-        print "amount:", amount
-
         valid = self.checkBidAmount(amount)
 
         if not valid:
@@ -262,7 +272,6 @@ class imgInputPractice(imgInputPracticeBase):
         err = 0
         if result == wx.ID_OK:
             answer =  dialog.getInput()
-            print answer
             err = self.checkAnswer(answer)
         else:
             pass
@@ -282,7 +291,6 @@ class imgInputPractice(imgInputPracticeBase):
 
     def displayAnswer(self):
         if self.showAnswer:
-            print self.currentCode
             self.showAnswerText.SetLabel(self.currentCode)
         else:
             self.showAnswerText.SetLabel("")
@@ -323,6 +331,21 @@ class imgInputPractice(imgInputPracticeBase):
 
     def updateBidAmount(self, bidAmount):
         self.bidAmountTxt.SetLabel(str(bidAmount))
+
+
+    def onStatReset(self, evt):
+        self.totalCnt = 0
+        self.errCnt = 0
+        self.correctCnt = 0
+        self.fast = 9999
+        self.slow = 0
+        self.timeTotal= 0
+        self.accurate = 0
+        self.inError = 0
+
+        self.resetClock()
+        self.updateAllStats()
+
 
 class ImageCodeDialog(ImageCodeDialogBase):
     def __init__(self, parent, fileName, amount):
